@@ -1,8 +1,10 @@
+import smtplib
 import requests
 from bs4 import BeautifulSoup
 import csv
 import tkinter as tk
 from tkinter import messagebox
+import smtplib
 import matplotlib.pyplot as plt
 import numpy as np
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0"
@@ -10,8 +12,8 @@ HEADERS = {
         "User-Agent": USER_AGENT,
         "Accept-Language": "en-US, en;q=0.5"
     }
-amazon_url = "https://www.amazon.ca/2021-Apple-iPad-10-2-inch-Wi-Fi/dp/B09G9BJVT6/ref=sr_1_1_sspa?crid=JH8GH92SZ3F3&dib=eyJ2IjoiMSJ9.rpni6IL_14CkVVRbzrBrSQP2iA-E7i-iCf8yoLOfdYtIgwhK2SR-CeHA6HjsY-FdNaYqLvEGHnkWhb0X8zaUqpJgFpiASOc6u8NK19WLlj4Uk3DlPgDfiRjYUe1ToRcdvwV-Uh9AqxRBa5celn5FVVCqQkHY4Rp9KTLlguCEzJqwoesIu_Ivn4sAz3fwF4ZwNUPRFfkcZzygWt3bzKTR1u0TqcYL37WsqLWvKMYsUnaj-Hb-7F3fnUcBGciCYC3ogWPePaQg7UAnVzIJmGjHFQWxLKSa1Q0xNw62XZab2QE.COam3A7jfV-pQcDlMC599-IshvNMd-9MjG_VhBpr984&dib_tag=se&keywords=ipad+10th+generation&qid=1708364536&sprefix=ipad+10th+generation%2Caps%2C193&sr=8-1-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9hdGY&psc=1"
-response = requests.get(amazon_url, headers=HEADERS)
+amazon_ipad_url = "https://www.amazon.ca/2021-Apple-iPad-10-2-inch-Wi-Fi/dp/B09G9BJVT6/ref=sr_1_1_sspa?crid=JH8GH92SZ3F3&dib=eyJ2IjoiMSJ9.rpni6IL_14CkVVRbzrBrSQP2iA-E7i-iCf8yoLOfdYtIgwhK2SR-CeHA6HjsY-FdNaYqLvEGHnkWhb0X8zaUqpJgFpiASOc6u8NK19WLlj4Uk3DlPgDfiRjYUe1ToRcdvwV-Uh9AqxRBa5celn5FVVCqQkHY4Rp9KTLlguCEzJqwoesIu_Ivn4sAz3fwF4ZwNUPRFfkcZzygWt3bzKTR1u0TqcYL37WsqLWvKMYsUnaj-Hb-7F3fnUcBGciCYC3ogWPePaQg7UAnVzIJmGjHFQWxLKSa1Q0xNw62XZab2QE.COam3A7jfV-pQcDlMC599-IshvNMd-9MjG_VhBpr984&dib_tag=se&keywords=ipad+10th+generation&qid=1708364536&sprefix=ipad+10th+generation%2Caps%2C193&sr=8-1-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9hdGY&psc=1"
+response = requests.get(amazon_ipad_url, headers=HEADERS)
 soup = BeautifulSoup(response.content, "lxml")
 a_title_tag = soup.find("span", id="productTitle")
 a_title_text = a_title_tag.getText()
@@ -25,8 +27,8 @@ decimal_price_text = decimal_price_tag.getText()
 decimal_price = decimal_price_text.strip()
 a_price = price + "." + decimal_price
     #print(a_price)
-ebay_url = "https://www.ebay.ca/itm/175524001378?epid=28049286448&itmmeta=01HQ17DJ09TM9DX11P8KKSQWQW&hash=item28de0bb662%3Ag%3Ag3kAAOSwNcxh6LAr&itmprp=enc%3AAQAIAAAA0AxcRfbUhIIib0nsP8DIRvg3llt5e6hZOun43gdLoS%2B%2FsSYGZsxpGEPJRoLgTlLevCwES3GZSRnp8DQ1tcwdNjvBDnyeEfWGsGLy7HEYSPD3kMd3w1WBVULchv6lebN33EkH5OkuWmVbSr0ESAqgeJAGs%2FH%2B5NjIT4u2gWAshBz8lVBlY0Zm9EGLtxmEK5lYovLM1AK0hDF6fWvcGzuvfkzT3039ZWRP3Rch9Oot3suD3QP4BGjmm1qPH1hSvR6OclVTv9zenHq2Js6fUOdA6zc%3D%7Ctkp%3ABk9SR6Cgtqe4Yw&LH_BIN=1&LH_ItemCondition=1000"
-response = requests.get(ebay_url, headers=HEADERS)
+ebay_ipad_url = "https://www.ebay.ca/itm/175524001378?epid=28049286448&itmmeta=01HQ17DJ09TM9DX11P8KKSQWQW&hash=item28de0bb662%3Ag%3Ag3kAAOSwNcxh6LAr&itmprp=enc%3AAQAIAAAA0AxcRfbUhIIib0nsP8DIRvg3llt5e6hZOun43gdLoS%2B%2FsSYGZsxpGEPJRoLgTlLevCwES3GZSRnp8DQ1tcwdNjvBDnyeEfWGsGLy7HEYSPD3kMd3w1WBVULchv6lebN33EkH5OkuWmVbSr0ESAqgeJAGs%2FH%2B5NjIT4u2gWAshBz8lVBlY0Zm9EGLtxmEK5lYovLM1AK0hDF6fWvcGzuvfkzT3039ZWRP3Rch9Oot3suD3QP4BGjmm1qPH1hSvR6OclVTv9zenHq2Js6fUOdA6zc%3D%7Ctkp%3ABk9SR6Cgtqe4Yw&LH_BIN=1&LH_ItemCondition=1000"
+response = requests.get(ebay_ipad_url, headers=HEADERS)
 soup = BeautifulSoup(response.content, "lxml")
 e_title_tag = soup.find("span", class_="ux-textspans ux-textspans--BOLD")
 e_title_text = e_title_tag.getText()
@@ -62,6 +64,48 @@ def show_bmi_barchart():
     plt.ylabel("Prices")
     plt.title("Price comparison")
     plt.show()
+def notifications():
+    server = smtplib.SMTP("smtp.gmail.com",587)
+    server.ehlo()
+    server.starttls()
+    server.ehlo()
+    server.login("lakshmi.cheenu1@gmail.com","ramprasanth")
+    subject = "Best Price"
+    body = "Please check {company} , click her {url}".formay(Website = "Amazon", url = amazon_url)
+    msg = f"Subject:{subject}, \n\n{body}"
+    server.sendmail("receivermailid",msg)
+    print("mail send")
+    server.quit()
+
+def send_email():
+    # Get the user's email from the input field
+    user_email = email_text.get()
+
+    # Set up your email credentials
+    sender_email = 'lakshmi.cheenu1@outlook.com'
+    sender_password = 'ZXcv12#$'
+
+    # Compose the email message
+    subject = 'Hello from your Python program!'
+    body = 'This is the email content. You can customize it.'
+    message = f'Subject: {subject}\n\n{body}'
+
+    try:
+        # Connect to the SMTP server
+        server = smtplib.SMTP('smtp-mail.outlook.com', 587)
+        server.starttls()
+        server.login(sender_email, sender_password)
+
+        # Send the email
+        server.sendmail(sender_email, user_email, message)
+        server.quit()
+
+        # Show a success message
+        messagebox.showinfo('Success', 'Email sent successfully!')
+    except Exception as e:
+        # Show an error message
+        messagebox.showerror('Error', f'Error sending email: {str(e)}')
+
 
 window = tk.Tk()
 window.title("Price Comparison Tool")
@@ -112,7 +156,7 @@ email_text_label.grid(row=0, column=0,padx=10,pady=10)
 email_text=tk.Entry(email_frame)
 email_text.grid(row=0, column=1,padx=10,pady=10)
 
-email_button = tk.Button(email_frame, text="Press me")
+email_button = tk.Button(email_frame, text="Press me",command=send_email)
 email_button.grid(row=1, column=0,padx=10,pady=10)
 
 email_label = tk.Label(email_frame, text="You will get an email notification")
