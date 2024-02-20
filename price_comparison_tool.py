@@ -112,26 +112,13 @@ def show_bmi_barchart():
     plt.ylabel("Prices")
     plt.title("Price comparison")
     plt.show()
-def notifications():
-    server = smtplib.SMTP("smtp.gmail.com",587)
-    server.ehlo()
-    server.starttls()
-    server.ehlo()
-    server.login("lakshmi.cheenu1@gmail.com","ramprasanth")
-    subject = "Best Price"
-    body = "Please check {company} , click her {url}".formay(Website = "Amazon", url = amazon_url)
-    msg = f"Subject:{subject}, \n\n{body}"
-    server.sendmail("receivermailid",msg)
-    print("mail send")
-    server.quit()
-
 def send_email():
     # Get the user's email from the input field
     user_email = email_text.get()
 
     # Set up your email credentials
-    sender_email = 'lakshmi.cheenu1@outlook.com'
-    sender_password = 'ZXcv12#$'
+    sender_email = 'yourmail@outlook.com'
+    sender_password = '***************'
 
     # Compose the email message
     subject = 'Hello You Got a Good Deal!'
