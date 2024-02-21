@@ -141,8 +141,8 @@ def send_email():
     user_email = email_text.get()
 
     # Set up your email credentials
-    sender_email = 'lakshmi.cheenu1@outlook.com'
-    sender_password = 'ZXcv12#$'
+    sender_email = 'youremail@outlook.com'
+    sender_password = 'yourpassword'
 
     # Compose the email message
     subject = 'Hello You Got a Good Deal!'
