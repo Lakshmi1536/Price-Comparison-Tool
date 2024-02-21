@@ -7,6 +7,9 @@ from tkinter import messagebox
 import smtplib
 import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from matplotlib.figure import Figure
+
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0"
 HEADERS = {
         "User-Agent": USER_AGENT,
@@ -18,7 +21,6 @@ soup = BeautifulSoup(response.content, "lxml")
 a_title_tag = soup.find("span", id="productTitle")
 a_title_text = a_title_tag.getText()
 a_title = a_title_text.strip()
-    #print(a_title)
 price_tag = soup.find("span", class_="a-price-whole")
 price_text = price_tag.getText()
 price = price_text.rstrip(".")
@@ -26,24 +28,20 @@ decimal_price_tag = soup.find("span", class_="a-price-fraction")
 decimal_price_text = decimal_price_tag.getText()
 decimal_price = decimal_price_text.strip()
 a_price = price + "." + decimal_price
-    #print(a_price)
 ebay_ipad_url = "https://www.ebay.ca/itm/175524001378?epid=28049286448&itmmeta=01HQ17DJ09TM9DX11P8KKSQWQW&hash=item28de0bb662%3Ag%3Ag3kAAOSwNcxh6LAr&itmprp=enc%3AAQAIAAAA0AxcRfbUhIIib0nsP8DIRvg3llt5e6hZOun43gdLoS%2B%2FsSYGZsxpGEPJRoLgTlLevCwES3GZSRnp8DQ1tcwdNjvBDnyeEfWGsGLy7HEYSPD3kMd3w1WBVULchv6lebN33EkH5OkuWmVbSr0ESAqgeJAGs%2FH%2B5NjIT4u2gWAshBz8lVBlY0Zm9EGLtxmEK5lYovLM1AK0hDF6fWvcGzuvfkzT3039ZWRP3Rch9Oot3suD3QP4BGjmm1qPH1hSvR6OclVTv9zenHq2Js6fUOdA6zc%3D%7Ctkp%3ABk9SR6Cgtqe4Yw&LH_BIN=1&LH_ItemCondition=1000"
 response = requests.get(ebay_ipad_url, headers=HEADERS)
 soup = BeautifulSoup(response.content, "lxml")
 e_title_tag = soup.find("span", class_="ux-textspans ux-textspans--BOLD")
 e_title_text = e_title_tag.getText()
 e_title = e_title_text.strip()
-    #print(e_title)
 e_price_tag = soup.find("div", class_="x-price-primary").text
 e_price = e_price_tag.lstrip("C $")
-    #print(e_price)
 amazon_apple_watch_url ="https://www.amazon.ca/Apple-Smartwatch-Midnight-Aluminium-Water-Resistant/dp/B0CHXCWBYT/ref=sr_1_5?crid=3EL36YWSSXP41&dib=eyJ2IjoiMSJ9.38xjdLNU--pTtn-VdutIVdsWT96vu2ca5TWjysZAmaxB-q8yYSzHrPpZ_uitYFs3hS4bv63mw1T-z1v-8to_XrBhh_Kq2rWqZyaq_otgrIivZo7WGRDRo8x_EH287CGRSxWlOPd18UcQbhE8nKoNuSs28Th6wAJCE3xACs3ESr0ShfqqikHAh1Hw_ehSg93HX2IfmU9yYxGtL1ipdphVGfe5qyGfIs9FItB4PRDOXu2QkVCRHwkLWVEi2DKTkQcTPfjy4OxgaNJYYSdplNwyGOzafh8UQnYl9DMCzQZLqUw.aDyVOy347C5olVMpIaU9XdQ2i8-Lvla2x74zrQH5YCo&dib_tag=se&keywords=apple+watch&qid=1708365591&sprefix=apple+watch%2Caps%2C160&sr=8-5"
 response = requests.get(amazon_apple_watch_url, headers=HEADERS)
 soup = BeautifulSoup(response.content, "lxml")
 awatch_title_tag = soup.find("span", id="productTitle")
 awatch_title_text=awatch_title_tag.getText()
 awatch_title=awatch_title_text.strip()
-#print(awatch_title)
 awatch_price_tag=soup.find("span",class_="a-price-whole")
 awatch_price_text=awatch_price_tag.getText()
 awatch_price=awatch_price_text.rstrip(".")
@@ -51,22 +49,19 @@ awatch_decimal_price_tag = soup.find("span", class_="a-price-fraction")
 awatch_decimal_price_text=awatch_decimal_price_tag.getText()
 awatch_decimal_price=awatch_decimal_price_text.strip()
 awatch_totalprice=awatch_price+"."+awatch_decimal_price
-#print(awatch_totalprice)
 ebay_apple_watch_url ="https://www.ebay.ca/itm/256371656305?itmmeta=01HQ18DWH3HAK3NG688QR6V35T&hash=item3bb0f10671%3Ag%3ArbAAAOSwIitlgjUe&itmprp=enc%3AAQAIAAAA8HzNCLK8VNCg2uzFLGTlrjF2CRrISwWWHYN3tDVvlYyK4v4V3%2FE9pVbEEnH0IBqNrTDambjjmnJRhHH0W6bR8zS3tEEctveCavNb16uXamctWd66MuPXNO5jOfIsJmbidrdQZ6zEog%2BgD5V20mLjMIYC1xP7Tfi2pzdCmBx%2FRnjXXMWbTQyOukLAIIwqdClQketxE2NTyEGS7wGICYQEMsxjDNoUj9R%2BbDS2UTcju3dmFKOoKXFwkk874T35B0M6MU1nto7jJ1vasZ6WwyTE3sC%2B6bXrXwyn96QbB3f2x%2B%2BUdweWOI4mu5c11F6kVuUO6g%3D%3D%7Ctkp%3ABk9SR9LIt6i4Yw&LH_BIN=1&LH_ItemCondition=3"
 response = requests.get(ebay_apple_watch_url, headers=HEADERS)
 soup = BeautifulSoup(response.content, "lxml")
 eawatch_title_tag = soup.find("span", class_="ux-textspans ux-textspans--BOLD")
 eawatch_title_text=eawatch_title_tag.getText()
 eawatch_title=eawatch_title_text.strip()
-#print(eawatch_title)
 eawatch_price_tag=soup.find("div",class_="x-price-primary").text
 eawatch_price=eawatch_price_tag.lstrip("C $")
-#print(eawatch_price)
-fields = ['Website_Name', 'Product_Name', 'Price','URL']
-rows = [['Amazon', a_title, a_price,amazon_ipad_url],
-            ['ebay', e_title, e_price,ebay_ipad_url],
-        ['Amazon',awatch_title,awatch_totalprice,amazon_apple_watch_url],
-        ['ebay',eawatch_title,eawatch_price,ebay_apple_watch_url]]
+fields = ['Website_Name', 'Product_Name','Product_Title', 'Price','URL']
+rows = [['Amazon', 'Apple ipad',a_title, a_price,amazon_ipad_url],
+            ['ebay','Apple ipad', e_title, e_price,ebay_ipad_url],
+        ['Amazon','Apple Watch',awatch_title,awatch_totalprice,amazon_apple_watch_url],
+        ['ebay','Apple Watch',eawatch_title,eawatch_price,ebay_apple_watch_url]]
 filename = "Price_Details.csv"
 with open(filename, 'w') as csvfile:
         # creating a csv writer object
@@ -85,9 +80,19 @@ def best_ipad():
     if min_price==amazon_ipad_price:
         website_name.config(text=f"You got a good deal at Amazon :C$ {min_price: }")
         #website_name.config(text=amazon_ipad_url)
-
     else:
         website_name.config(text=f"You got a good deal at Ebay :C$ {min_price: }")
+    website = ["Amazon", "Ebay"]
+    price = [amazon_ipad_price, ebay_ipad_price]
+    fig = Figure(figsize=(5, 2), dpi=100)
+    ax = fig.add_subplot(111)
+    ax.bar(website, price, color='b',alpha=0.7)
+    ax.set_xlabel("Website")
+    ax.set_ylabel("Price")
+    ax.set_title("Price comparison")
+    canvas = FigureCanvasTkAgg(fig, master=result_frame)
+    #canvas.get_tk_widget().pack()
+    canvas.get_tk_widget().grid(row=1, column=0, columnspan=2)
 def best_apple_watch():
     min_price = min(amazon_apple_watch_price,ebay_apple_watch_price)
     if min_price==awatch_price:
@@ -96,29 +101,48 @@ def best_apple_watch():
 
     else:
         website_name.config(text=f"You got a good deal at Ebay :C$ {min_price: }")
+    website = ["Amazon", "Ebay"]
+    price = [amazon_apple_watch_price, ebay_apple_watch_price]
+    fig = Figure(figsize=(5, 2), dpi=100)
+    ax = fig.add_subplot(111)
+    ax.bar(website, price, color='b', alpha=0.7)
+    ax.set_xlabel("Website")
+    ax.set_ylabel("Price")
+    ax.set_title("Price comparison")
+    canvas = FigureCanvasTkAgg(fig, master=result_frame)
+    # canvas.get_tk_widget().pack()
+    canvas.get_tk_widget().grid(row=1, column=0, columnspan=2)
+
+# Example data (replace with actual data)
+
 def show_bmi_barchart():
-    websites = ["Amazon", "Ebay"]
-    price=[0.0,0.0]
-    if apple_ipad.cget("text")=="Apple iPad":
-        price = [amazon_ipad_price,ebay_ipad_price]
-    elif apple_watch.cget("text")=="Apple Watch":
-        price=[amazon_apple_watch_price,ebay_apple_watch_price]
-    #elif fitbit_watch.cget("text") == "Fitbit Watch":
-    #    price = [ama]
-    #elif pixel_phone.cget("text")=="Pixel Phone":
-    #    price=[ama]
-    plt.bar(websites, price, color=["blue", "green"])
-    plt.xlabel("Wbsites")
-    plt.ylabel("Prices")
-    plt.title("Price comparison")
+    Amazon = [amazon_ipad_price,amazon_apple_watch_price]  # Summer prices
+    ebay = [ebay_ipad_price, ebay_apple_watch_price]  # Winter prices
+
+    websites = ["Ipad", "Applewatch"]
+
+    fig, ax = plt.subplots()
+    bar_width = 0.35
+    index = np.arange(len(websites))
+
+    ax.bar(index, Amazon, bar_width, label="Amazon")
+    ax.bar(index + bar_width, ebay, bar_width, label="Ebay")
+
+    ax.set_xlabel('Website')
+    ax.set_ylabel('Price')
+    ax.set_title('Price Comparison by Category')
+    ax.set_xticks(index + bar_width / 2)
+    ax.set_xticklabels(websites)
+    ax.legend()
+
     plt.show()
 def send_email():
     # Get the user's email from the input field
     user_email = email_text.get()
 
     # Set up your email credentials
-    sender_email = 'yourmail@outlook.com'
-    sender_password = '***************'
+    sender_email = 'lakshmi.cheenu1@outlook.com'
+    sender_password = 'ZXcv12#$'
 
     # Compose the email message
     subject = 'Hello You Got a Good Deal!'
@@ -156,6 +180,7 @@ user_input_frame.grid(row=0,column=0,sticky='news')
 
 apple_ipad = tk.Button(user_input_frame, text="Apple iPad",command=best_ipad)
 apple_ipad.grid(row=0, column=3,padx=10,pady=10)
+#apple_ipad.pack()
 
 apple_watch = tk.Button(user_input_frame, text="Apple Watch",command=best_apple_watch)
 apple_watch.grid(row=1, column=3,padx=10,pady=10)
@@ -168,7 +193,7 @@ pixel_phone = tk.Button(user_input_frame, text="Pixel Phone")
                         #,command=best_pixel_phone)
 pixel_phone.grid(row=3, column=3,padx=10,pady=10)
 
-e_website_frame=tk.LabelFrame(frame,text='Ecommerce websites ',fg="blue")
+e_website_frame=tk.LabelFrame(frame,text='Ecommerce Websites ',fg="blue")
 e_website_frame.grid(row=0,column=1,sticky='news')
 
 amazon_label = tk.Label(e_website_frame, text="Amazon")
@@ -177,13 +202,13 @@ amazon_label.grid(row=0, columnspan=1)
 ebay_label = tk.Label(e_website_frame, text="EBAY")
 ebay_label.grid(row=1, columnspan=1)
 
-bestbuy_label = tk.Label(e_website_frame, text="BEST BUY")
+bestbuy_label = tk.Label(e_website_frame, text="Best Buy")
 bestbuy_label.grid(row=2, columnspan=1)
 
-walmart_label = tk.Label(e_website_frame, text="WALMART")
+walmart_label = tk.Label(e_website_frame, text="Walmart")
 walmart_label.grid(row=3, columnspan=1)
 
-email_frame=tk.LabelFrame(frame,text='send me an email',fg="blue")
+email_frame=tk.LabelFrame(frame,text='Send me an email',fg="blue")
 email_frame.grid(row=1,column=0,sticky='news')
 
 email_text_label = tk.Label(email_frame, text="Please enter your email:")
@@ -198,7 +223,7 @@ email_button.grid(row=1, column=0,padx=10,pady=10)
 email_label = tk.Label(email_frame, text="You will get an email notification")
 email_label.grid(row=1, column=1,padx=10,pady=10)
 
-price_visualization_frame=tk.LabelFrame(frame,text='Price visualization',fg="blue")
+price_visualization_frame=tk.LabelFrame(frame,text='Price Visualization',fg="blue")
 price_visualization_frame.grid(row=1,column=1,sticky='news')
 
 bar_chart = tk.Button(price_visualization_frame, text="Barchart",command=show_bmi_barchart)
