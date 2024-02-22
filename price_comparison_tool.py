@@ -321,7 +321,7 @@ ebay_label.grid(row=2, column=14)
 bestbuy_label = tk.Label(user_input_frame, text="Walmart")
 bestbuy_label.grid(row=3, column=14)
 
-email_frame=tk.LabelFrame(frame,text='Email and Barchart',fg="blue")
+email_frame=tk.LabelFrame(frame,text='Email',fg="blue")
 email_frame.grid(row=0,column=1,sticky='news')
 email_frame.configure(bg='Lavender')
 
@@ -340,18 +340,18 @@ email_button.grid(row=2, column=0,padx=10,pady=10)
 email_label = tk.Label(email_frame, text="You will get an email notification",fg='blue')
 email_label.grid(row=2, column=1,padx=10,pady=10)
 
-price_visualization_frame=tk.Label(email_frame,text='Price Visualization of All Products',fg="blue")
-price_visualization_frame.grid(row=3,column=0,sticky='news')
-
-bar_chart = tk.Button(email_frame, text="Barchart",command=show_barchart)
-bar_chart.grid(row=4, column=0,padx=10,pady=10)
-
 result_frame=tk.LabelFrame(frame,text='Best Price',fg="blue")
-result_frame.grid(row=1,columnspan=1,sticky='news')
+result_frame.grid(row=1,column=0,sticky='news')
 result_frame.configure(bg='Lavender')
-
 
 website_name = tk.Label(result_frame, text="")
 website_name.grid(row=0, column=2)
+
+price_visualization_frame=tk.LabelFrame(frame,text='Price Visualization of All Products',fg="blue")
+price_visualization_frame.grid(row=1,column=1,sticky='news')
+price_visualization_frame.configure(bg='Lavender')
+
+bar_chart = tk.Button(price_visualization_frame, text="Barchart",command=show_barchart)
+bar_chart.grid(row=4, column=0,padx=10,pady=10)
 
 window.mainloop()
