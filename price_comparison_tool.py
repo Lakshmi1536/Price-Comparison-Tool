@@ -6,15 +6,18 @@ import tkinter as tk
 from tkinter import messagebox
 import smtplib
 import matplotlib.pyplot as plt
-import numpy as np
+#import numpy as np
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0"
+#Identifies the client application (e.g., browser) making the request.
 HEADERS = {
         "User-Agent": USER_AGENT,
         "Accept-Language": "en-US, en;q=0.5"
     }
+#HTTP headers facilitate communication between clients(such as web
+#browsers or mobile apps) and servers during requests and responses.
 #Amazon Ipad
 amazon_ipad_url = "https://www.amazon.ca/2021-Apple-iPad-10-2-inch-Wi-Fi/dp/B09G9BJVT6/ref=sr_1_1_sspa?crid=JH8GH92SZ3F3&dib=eyJ2IjoiMSJ9.rpni6IL_14CkVVRbzrBrSQP2iA-E7i-iCf8yoLOfdYtIgwhK2SR-CeHA6HjsY-FdNaYqLvEGHnkWhb0X8zaUqpJgFpiASOc6u8NK19WLlj4Uk3DlPgDfiRjYUe1ToRcdvwV-Uh9AqxRBa5celn5FVVCqQkHY4Rp9KTLlguCEzJqwoesIu_Ivn4sAz3fwF4ZwNUPRFfkcZzygWt3bzKTR1u0TqcYL37WsqLWvKMYsUnaj-Hb-7F3fnUcBGciCYC3ogWPePaQg7UAnVzIJmGjHFQWxLKSa1Q0xNw62XZab2QE.COam3A7jfV-pQcDlMC599-IshvNMd-9MjG_VhBpr984&dib_tag=se&keywords=ipad+10th+generation&qid=1708364536&sprefix=ipad+10th+generation%2Caps%2C193&sr=8-1-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9hdGY&psc=1"
 response = requests.get(amazon_ipad_url, headers=HEADERS)
@@ -32,9 +35,17 @@ a_ipad_price = a_ipad_whole_price + "." + a_ipad_decimal_price
 
 #Ebay Ipad
 ebay_ipad_url = "https://www.ebay.ca/itm/175524001378?epid=28049286448&itmmeta=01HQ17DJ09TM9DX11P8KKSQWQW&hash=item28de0bb662%3Ag%3Ag3kAAOSwNcxh6LAr&itmprp=enc%3AAQAIAAAA0AxcRfbUhIIib0nsP8DIRvg3llt5e6hZOun43gdLoS%2B%2FsSYGZsxpGEPJRoLgTlLevCwES3GZSRnp8DQ1tcwdNjvBDnyeEfWGsGLy7HEYSPD3kMd3w1WBVULchv6lebN33EkH5OkuWmVbSr0ESAqgeJAGs%2FH%2B5NjIT4u2gWAshBz8lVBlY0Zm9EGLtxmEK5lYovLM1AK0hDF6fWvcGzuvfkzT3039ZWRP3Rch9Oot3suD3QP4BGjmm1qPH1hSvR6OclVTv9zenHq2Js6fUOdA6zc%3D%7Ctkp%3ABk9SR6Cgtqe4Yw&LH_BIN=1&LH_ItemCondition=1000"
-response = requests.get(ebay_ipad_url, headers=HEADERS)
-soup = BeautifulSoup(response.content, "lxml")
+response = requests.get(ebay_ipad_url, headers=HEADERS)# requests library to fetch the HTML content from a page.
+#BeautifulSoup is a Python library used for parsing HTML and XML documents
+soup = BeautifulSoup(response.content, "lxml")# This parser is known for its speed and leniency.
+# specifies the parser to be used by BeautifulSoup
+#using "lxml" as the parser in your BeautifulSoup instance
+# allows you to efficiently navigate and extract data from HTML content
 e_ipad_title_tag = soup.find("span", class_="ux-textspans ux-textspans--BOLD")
+#method is used to locate the first occurrence of a specific HTML element
+# that matches certain criteria.
+#searching for the first <span> element
+# with the specified classes in the parsed HTML content
 e_ipad_title_text = e_ipad_title_tag.getText()
 e_ipad_title = e_ipad_title_text.strip()
 e_ipad_price_tag = soup.find("div", class_="x-price-primary").text
@@ -173,6 +184,7 @@ def best_ipad():
     min_price = min(amazon_ipad_price, ebay_ipad_price,w_ipad_price)
     if min_price==amazon_ipad_price:
         website_name.config(text=f"Apple Ipad:You got a good deal at Amazon :C$ {min_price: }")
+        #content from the website_name widget
         #website_name.config(text=amazon_ipad_url)
     elif min_price==ebay_ipad_price:
         website_name.config(text=f"Apple Ipad:You got a good deal at Ebay :C$ {min_price: }")
@@ -274,23 +286,27 @@ def show_barchart():
 #Email Configuration
 def send_email():
     # Get the user's email from the input field
-    user_email = email_text.get()
+    user_email = email_text.get()# retrieving the user’s email from an input field.
 
     # Set up your email credentials
-    sender_email = 'lakshmi.cheenu1@outlook.com'
-    sender_password = 'ZXcv12#$'
+    sender_email = 'Mailid@outlook.com' #(sender’s email address and password).
+    sender_password = 'Password'
 
     # Compose the email message
     subject = 'Hello You Got a Good Deal!'
     #body = 'This is the email content. You can customize it.'
-    body=(website_name.cget("text"))
+    body=(website_name.cget("text"))# content from the website_name widget
           #,'Here is the link : ',amazon_ipad_url)
     message = f'Subject: {subject}\n\n{body}'
 
     try:
         # Connect to the SMTP server
+        #connecting to an SMTP (Simple Mail Transfer Protocol)
+        # server hosted by Outlook (smtp-mail.outlook.com) on port 587.
         server = smtplib.SMTP('smtp-mail.outlook.com', 587)
+        # using TLS (Transport Layer Security) encryption for secure communication.
         server.starttls()
+        #logging in with your sender email and password.
         server.login(sender_email, sender_password)
 
         # Send the email
